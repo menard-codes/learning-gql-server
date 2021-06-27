@@ -1,15 +1,28 @@
 const admin = require('../firebaseApp.js');
+const { AuthenticationError } = require('apollo-server');
+
 
 const auth = admin.auth();
 
+const retrieveUser = async authToken => {
+    try {
+        const decodedToken = await auth.verifyIdToken(authToken);
+        return decodedToken
+    } catch (error) {
+        return 'Invalid Token'
+    }
+}
 
-// Context
+const authContext = async req => {
+    const authToken = req.headers.authorization;
+    const requestingUser = await retrieveUser(authToken);
 
-// users need to be authorized
+    if (requestingUser === 'Invalid Token') {
+        throw new AuthenticationError('Error 401: Unauthorized Access')
+    } else {
+        // user is authorized
+        return {user: requestingUser}
+    }
+}
 
-// users can view their own notes
-
-// users can add their own notes
-
-// users can edit/delete their own notes
-
+module.exports = authContext;
