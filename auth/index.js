@@ -9,14 +9,20 @@ const retrieveUser = async authToken => {
         const decodedToken = await auth.verifyIdToken(authToken)
         return decodedToken
     } catch (error) {
-        throw new AuthenticationError(`Error 404: ${error.message}`)
+        return 'Invalid Token'
     }
 }
 
 const authContext = async req => {
     const authToken = req.headers.authorization;
     const requestingUser = await retrieveUser(authToken);
-    return {user: requestingUser}
+
+    if (requestingUser === 'Invalid Token') {
+        throw new AuthenticationError('Error 401: Unauthorized Access')
+    } else {
+        // user is authorized
+        return {user: requestingUser}
+    }
 }
 
 module.exports = authContext;
