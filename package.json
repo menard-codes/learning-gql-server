@@ -2,12 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "nodemon server"
+    "start": "nodemon src/server"
   },
   "keywords": [],
-  "author": "",
+  "author": "Menard Maranan",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.25.2",
